@@ -386,6 +386,11 @@
     #send-btn:disabled { background: var(--green-mid); cursor: not-allowed; }
     #send-btn svg { width: 17px; height: 17px; fill: white; }
 
+    .msg-bubble ul { padding-left: 18px; margin: 6px 0; }
+    .msg-bubble li { margin-bottom: 4px; }
+    .msg-bubble strong { font-weight: 500; }
+    .msg-bubble br + br { display: block; content: ""; margin-top: 6px; }
+
     .legal { margin-top: 8px; font-size: 0.68rem; color: var(--muted); text-align: center; line-height: 1.5; padding: 0 4px; }
 
     @media (max-width: 480px) {
@@ -649,12 +654,22 @@
 
       const bub = document.createElement('div');
       bub.className = 'msg-bubble';
-      bub.textContent = text;
+      bub.innerHTML = renderMarkdown(text);
 
       row.appendChild(av);
       row.appendChild(bub);
       feed.appendChild(row);
       feed.scrollTop = feed.scrollHeight;
+    }
+
+    function renderMarkdown(text) {
+      return text
+        .replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>")
+        .replace(/^[\-\*] (.+)/gm, "<li>$1</li>")
+        .replace(/(<li>[\s\S]*?</li>\n?)+/g, function(m){ return "<ul>" + m + "</ul>"; })
+        .replace(/^\d+\. (.+)/gm, "<li>$1</li>")
+        .replace(/\n\n/g, "<br><br>")
+        .replace(/\n/g, "<br>");
     }
 
     function showTyping() {
