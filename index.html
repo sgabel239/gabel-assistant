@@ -578,7 +578,7 @@
         const inputs = row.querySelectorAll('input');
         const label = inputs[0].value.trim();
         const url   = inputs[1].value.trim();
-        if (url && docId(url)) docs.push({ label: label || 'Document', url });
+        if (url) docs.push({ label: label || 'Document', url });
       });
 
       if (docs.length === 0) {
@@ -599,7 +599,7 @@
       loadEl.style.display = 'flex';
 
       // Load instructions doc
-      if (instrUrl && docId(instrUrl)) {
+      if (instrUrl) {
         try {
           statusEl.textContent = 'Loading instructions…';
           customInstructions = await fetchDoc(instrUrl);
